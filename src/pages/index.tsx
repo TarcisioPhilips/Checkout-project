@@ -3,9 +3,8 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import Stripe from "stripe";
-
 import Link from "next/link";
+import Stripe from "stripe";
 
 import { stripe } from "@/lib/stripe";
 import { HomeContainer, Product } from "@/styles/pages/home";
