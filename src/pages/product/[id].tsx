@@ -3,10 +3,11 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Stripe from "stripe";
 
 import { stripe } from "@/lib/stripe";
+import { PurchaseContext } from "@/providers/Purchase";
 import {
   ImageContainer,
   ProductContainer,
@@ -28,22 +29,11 @@ export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false);
 
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true);
-      const response = await axios.post("/api/checkout", {
-        priceId: product.defaultPriceId,
-      });
+  const { cart, addToCart } = useContext(PurchaseContext);
 
-      const { checkoutUrl } = response.data;
-
-      window.location.href = checkoutUrl;
-    } catch (err) {
-      //Conectar com ferramenta de observabilidade
-      setIsCreatingCheckoutSession(false);
-      alert("Falha ao redirecionar ao checkout!");
-    }
-  }
+  const handleAddToCart = () => {
+    addToCart({ ...product, quantity: 1 });
+  };
 
   // const { isFallback } = useRouter();
 
@@ -57,17 +47,22 @@ export default function Product({ product }: ProductProps) {
       </Head>
       <ProductContainer>
         <ImageContainer>
-          <Image src={product.imageUrl} alt='' width={520} height={480}></Image>
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            width={520}
+            height={480}
+          ></Image>
         </ImageContainer>
         <ProductDetails>
           <h1>{product.name}</h1>
           <span> {product.price} </span>
           <p>{product.description}</p>
           <button
+            onClick={handleAddToCart}
             disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
           >
-            Comprar Agora
+            Adicionar ao Carrinho
           </button>
         </ProductDetails>
       </ProductContainer>
