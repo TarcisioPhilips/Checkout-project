@@ -45,19 +45,19 @@ export default function Product({ product }: ProductProps) {
     }
   }
 
-  const { isFallback } = useRouter();
+  // const { isFallback } = useRouter();
 
-  if (isFallback) {
-    return <p>Loading...</p>;
-  }
+  // if (isFallback) {
+  //   return <p>Loading...</p>;
+  // }
   return (
     <>
       <Head>
-        <title>{product.name} | Shop</title>
+        <title>{`${product.name} | Shop`}</title>
       </Head>
       <ProductContainer>
         <ImageContainer>
-          <Image src={product.imageUrl} alt="" width={520} height={480}></Image>
+          <Image src={product.imageUrl} alt='' width={520} height={480}></Image>
         </ImageContainer>
         <ProductDetails>
           <h1>{product.name}</h1>
@@ -78,7 +78,7 @@ export default function Product({ product }: ProductProps) {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [{ params: { id: "prod_Qc5JgHsqng6Mb7" } }],
-    fallback: true,
+    fallback: "blocking",
   };
 };
 
